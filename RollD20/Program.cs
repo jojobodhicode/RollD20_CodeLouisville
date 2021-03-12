@@ -24,9 +24,30 @@ namespace RollD20
             Console.WriteLine("What kind of dice would you like to roll?");
             Console.WriteLine("Examples include d4, d6, d8, d10, d12, d20, or d100");
             string DiceType = Console.ReadLine();
-            string TrimmedDiceType = DiceType.TrimStart('d');
-            int DiceTypeInt = Int32.Parse(TrimmedDiceType);
-            return DiceTypeInt;
+            DiceType.ToLower();
+            if (DiceType.Substring(0,1) == "d")
+            {
+                try
+                {
+                 string TrimmedDiceType = DiceType.TrimStart('d');
+                 int DiceTypeInt = Int32.Parse(TrimmedDiceType);
+                 return DiceTypeInt;
+                }
+
+                catch(Exception)
+                {
+                 Console.WriteLine("Please format your dice type in the format d + number of sides, ex.d4, d6, d10,...");
+                 DiceTypeCollector();
+                 return 0;
+                }
+            }
+
+            else
+            {
+                Console.WriteLine("Please format your dice type in the format d + number of sides, ex.d4, d6, d10,...");
+                DiceTypeCollector();
+                return 0;
+            }
         }
 
 
@@ -34,8 +55,18 @@ namespace RollD20
         {
             Console.WriteLine("How many dice would you like to roll?");
             string DiceNumber = Console.ReadLine();
-            int DiceNumberInt = Int32.Parse(DiceNumber);
-            return DiceNumberInt;
+            try
+             {
+                int DiceNumberInt = Int32.Parse(DiceNumber);
+                return DiceNumberInt;
+             }
+
+            catch(Exception)
+             {
+                Console.WriteLine("Please enter an integer. Ex. 1, 2, 3, ...");
+                NumberOfDiceCollector();
+                return 0;
+            }
         }
 
        public static int[] DiceRoller(int ReturnedDiceType, int ReturnedNumberOfDice)
