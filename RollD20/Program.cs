@@ -37,16 +37,14 @@ namespace RollD20
                 catch(Exception)
                 {
                  Console.WriteLine("Please format your dice type in the format d + number of sides, ex.d4, d6, d10,...");
-                 DiceTypeCollector();
-                 return 0;
+                 return DiceTypeCollector();
                 }
             }
 
             else
             {
                 Console.WriteLine("Please format your dice type in the format d + number of sides, ex.d4, d6, d10,...");
-                DiceTypeCollector();
-                return 0;
+                return DiceTypeCollector();
             }
         }
 
@@ -64,8 +62,7 @@ namespace RollD20
             catch(Exception)
              {
                 Console.WriteLine("Please enter an integer. Ex. 1, 2, 3, ...");
-                NumberOfDiceCollector();
-                return 0;
+                return NumberOfDiceCollector();
             }
         }
 
