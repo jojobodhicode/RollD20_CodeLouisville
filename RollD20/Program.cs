@@ -8,7 +8,12 @@ namespace RollD20
         {
             Console.WriteLine("Hello! This is the RollD20 console app developed by Jordan Neumann written in C#.");
             Console.WriteLine("This DnD inspired app rolls die with user input a given number of times.");
-            AskQuestionsAndRollDice();
+            bool rollDice = true;
+            while (rollDice)
+            {
+                AskQuestionsAndRollDice();
+                rollDice = RollDiceAgain();
+            }
         }
 
         static void AskQuestionsAndRollDice()
@@ -16,7 +21,6 @@ namespace RollD20
             int ReturnedDiceType = DiceTypeCollector();
             int ReturnedNumberOfDice = NumberOfDiceCollector();
             DiceRoller(ReturnedDiceType, ReturnedNumberOfDice);
-            Looper();
         }
 
         public static int DiceTypeCollector()
@@ -24,20 +28,20 @@ namespace RollD20
             Console.WriteLine("What kind of dice would you like to roll?");
             Console.WriteLine("Examples include d4, d6, d8, d10, d12, d20, or d100");
             string DiceType = Console.ReadLine();
-            DiceType.ToLower();
-            if (DiceType.Substring(0,1) == "d")
+            DiceType = DiceType.ToLower();
+            if (DiceType.Substring(0, 1) == "d")
             {
                 try
                 {
-                 string TrimmedDiceType = DiceType.TrimStart('d');
-                 int DiceTypeInt = Int32.Parse(TrimmedDiceType);
-                 return DiceTypeInt;
+                    string TrimmedDiceType = DiceType.TrimStart('d');
+                    int DiceTypeInt = Int32.Parse(TrimmedDiceType);
+                    return DiceTypeInt;
                 }
 
-                catch(Exception)
+                catch (Exception)
                 {
-                 Console.WriteLine("Please format your dice type in the format d + number of sides, ex.d4, d6, d10,...");
-                 return DiceTypeCollector();
+                    Console.WriteLine("Please format your dice type in the format d + number of sides, ex.d4, d6, d10,...");
+                    return DiceTypeCollector();
                 }
             }
 
@@ -54,19 +58,19 @@ namespace RollD20
             Console.WriteLine("How many dice would you like to roll?");
             string DiceNumber = Console.ReadLine();
             try
-             {
+            {
                 int DiceNumberInt = Int32.Parse(DiceNumber);
                 return DiceNumberInt;
-             }
+            }
 
-            catch(Exception)
-             {
+            catch (Exception)
+            {
                 Console.WriteLine("Please enter an integer. Ex. 1, 2, 3, ...");
                 return NumberOfDiceCollector();
             }
         }
 
-       public static int[] DiceRoller(int ReturnedDiceType, int ReturnedNumberOfDice)
+        public static int[] DiceRoller(int ReturnedDiceType, int ReturnedNumberOfDice)
         {
             Console.WriteLine("Rolling dice...");
             int i;
@@ -76,30 +80,29 @@ namespace RollD20
                 Random rnd = new Random();
                 int RollerResult = rnd.Next(1, ReturnedDiceType + 1);
                 DieArray[i] = RollerResult;
-                Console.WriteLine(DieArray[i]);
+                Console.Write(DieArray[i] + " ");
             }
+            Console.WriteLine(" ");
             return DieArray;
-            
+
         }
 
-        public static void Looper()
+        static bool RollDiceAgain()
         {
-            Console.WriteLine("Would you like to roll again? Type 'y' for yes, or 'n' for no.");
-            string LoopAnswer = Console.ReadLine();
-            if(LoopAnswer == "y")
+            while (true)
             {
-                AskQuestionsAndRollDice();
+                Console.WriteLine("Would you like to roll again? Type 'y' or 'yes' for yes, and 'n' or 'no' for no");
+                string rollDiceAgain = Console.ReadLine();
+                rollDiceAgain = rollDiceAgain.ToLower();
+                if (rollDiceAgain == "y" || rollDiceAgain == "yes")
+                {
+                    return true;
+                }
+                else if (rollDiceAgain == "n" || rollDiceAgain == "no")
+                {
+                    return false;
+                }
             }
-            else if(LoopAnswer == "n")
-            {
-                Console.WriteLine("Thanks for using Roll D20!");
-                return;
-            }
-            else
-            {
-                Console.WriteLine("Please input either 'y' or 'n'");
-                Looper();
-            } 
         }
     }
 }
