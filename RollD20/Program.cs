@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace RollD20
 {
@@ -77,11 +78,13 @@ namespace RollD20
         public class Dice
         {
             public int NumberOfSides;
+            public int Result;
 
             public int DiceRoller()
             {
                 Random rnd = new Random();
                 int RollerResult = rnd.Next(1, NumberOfSides + 1);
+                Result = RollerResult;
                 return RollerResult;
             }
         }
@@ -96,10 +99,23 @@ namespace RollD20
                 Dice die = new Dice();
                 die.NumberOfSides = ReturnedDiceType;
                 int Result = die.DiceRoller();
+                dieRolls.Add(die);
                 Console.Write(Result + " ");
             }
-
+            
             Console.WriteLine("");
+
+            var queryNatHighestNumber = from die in dieRolls
+                                        where die.Result == ReturnedDiceType
+                                        select die;
+
+            var NumberOfHighestRolls = 0;
+
+            foreach (Dice die in queryNatHighestNumber)
+            {
+                NumberOfHighestRolls++;
+            }
+            Console.WriteLine("You rolled the highest number given the dice type " + NumberOfHighestRolls + " times! Congrats!");
         }
        
         static bool RollDiceAgain()
