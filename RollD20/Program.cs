@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.IO;
+using System.Text;
 
 namespace RollD20
 {
-    class Program
+    partial class Program
     {
         public static void Main()
         {
@@ -22,12 +24,12 @@ namespace RollD20
         {
             int ReturnedDiceType = DiceTypeCollector();
             int ReturnedNumberOfDice = NumberOfDiceCollector();
-            DiceRoller(ReturnedDiceType,ReturnedNumberOfDice);
+            Roll(ReturnedDiceType, ReturnedNumberOfDice);
         }
 
         public static int DiceTypeCollector()
         {
-            while(true)
+            while (true)
             {
                 Console.WriteLine("What kind of dice would you like to roll?");
                 Console.WriteLine("Examples include d4, d6, d8, d10, d12, d20, or d100");
@@ -52,13 +54,13 @@ namespace RollD20
                 {
                     Console.WriteLine("Please format your dice type in the format d + number of sides, ex.d4, d6, d10,...");
                 }
-            } 
+            }
         }
 
 
         public static int NumberOfDiceCollector()
         {
-            while(true)
+            while (true)
             {
                 Console.WriteLine("How many dice would you like to roll?");
                 string DiceNumber = Console.ReadLine();
@@ -75,26 +77,12 @@ namespace RollD20
             }
         }
 
-        public class Dice
-        {
-            public int NumberOfSides;
-            public int Result;
-
-            public int DiceRoller()
-            {
-                Random rnd = new Random();
-                int RollerResult = rnd.Next(1, NumberOfSides + 1);
-                Result = RollerResult;
-                return RollerResult;
-            }
-        }
-
-        public static void DiceRoller(int ReturnedDiceType, int ReturnedNumberOfDice)
+        public static void Roll(int ReturnedDiceType, int ReturnedNumberOfDice)
         {
             Console.WriteLine("Rolling dice...");
             List<Dice> dieRolls = new List<Dice>();
             int i;
-            for(i=0; i < ReturnedNumberOfDice; i++)
+            for (i = 0; i < ReturnedNumberOfDice; i++)
             {
                 Dice die = new Dice();
                 die.NumberOfSides = ReturnedDiceType;
@@ -102,7 +90,7 @@ namespace RollD20
                 dieRolls.Add(die);
                 Console.Write(Result + " ");
             }
-            
+
             Console.WriteLine("");
 
             var queryNatHighestNumber = from die in dieRolls
@@ -115,9 +103,24 @@ namespace RollD20
             {
                 NumberOfHighestRolls++;
             }
-            Console.WriteLine("You rolled the highest number given the dice type " + NumberOfHighestRolls + " times! Congrats!");
+
+            string Ending = "";
+
+            if (NumberOfHighestRolls > 0)
+            {
+                Ending = "Congrats!";
+            }
+
+            else
+            {
+                Ending = "Oops!";
+            }
+
+            Console.WriteLine("You rolled the highest number for a dice with " + ReturnedDiceType + " sides " + NumberOfHighestRolls + " times! " + Ending);
+
+
         }
-       
+
         static bool RollDiceAgain()
         {
             while (true)
@@ -131,6 +134,7 @@ namespace RollD20
                 }
                 else if (rollDiceAgain == "n" || rollDiceAgain == "no")
                 {
+                    Console.WriteLine("Thanks for using my app!");
                     return false;
                 }
             }
