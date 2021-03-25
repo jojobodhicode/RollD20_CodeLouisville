@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace RollD20
 {
@@ -20,73 +21,87 @@ namespace RollD20
         {
             int ReturnedDiceType = DiceTypeCollector();
             int ReturnedNumberOfDice = NumberOfDiceCollector();
-            DiceRoller(ReturnedDiceType, ReturnedNumberOfDice);
+            DiceRoller(ReturnedDiceType,ReturnedNumberOfDice);
         }
 
         public static int DiceTypeCollector()
         {
-            Console.WriteLine("What kind of dice would you like to roll?");
-            Console.WriteLine("Examples include d4, d6, d8, d10, d12, d20, or d100");
-            string DiceType = Console.ReadLine();
-            DiceType = DiceType.ToLower();
-            if (DiceType.Substring(0, 1) == "d")
+            while(true)
             {
-                try
+                Console.WriteLine("What kind of dice would you like to roll?");
+                Console.WriteLine("Examples include d4, d6, d8, d10, d12, d20, or d100");
+                string DiceType = Console.ReadLine();
+                DiceType = DiceType.ToLower();
+                if (DiceType.Substring(0, 1) == "d")
                 {
-                    string TrimmedDiceType = DiceType.TrimStart('d');
-                    int DiceTypeInt = Int32.Parse(TrimmedDiceType);
-                    return DiceTypeInt;
+                    try
+                    {
+                        string TrimmedDiceType = DiceType.TrimStart('d');
+                        int DiceTypeInt = Int32.Parse(TrimmedDiceType);
+                        return DiceTypeInt;
+                    }
+
+                    catch (Exception)
+                    {
+                        Console.WriteLine("Please format your dice type in the format d + number of sides, ex.d4, d6, d10,...");
+                    }
                 }
 
-                catch (Exception)
+                else
                 {
                     Console.WriteLine("Please format your dice type in the format d + number of sides, ex.d4, d6, d10,...");
-                    return DiceTypeCollector();
                 }
-            }
-
-            else
-            {
-                Console.WriteLine("Please format your dice type in the format d + number of sides, ex.d4, d6, d10,...");
-                return DiceTypeCollector();
-            }
+            } 
         }
 
 
         public static int NumberOfDiceCollector()
         {
-            Console.WriteLine("How many dice would you like to roll?");
-            string DiceNumber = Console.ReadLine();
-            try
+            while(true)
             {
-                int DiceNumberInt = Int32.Parse(DiceNumber);
-                return DiceNumberInt;
-            }
+                Console.WriteLine("How many dice would you like to roll?");
+                string DiceNumber = Console.ReadLine();
+                try
+                {
+                    int DiceNumberInt = Int32.Parse(DiceNumber);
+                    return DiceNumberInt;
+                }
 
-            catch (Exception)
-            {
-                Console.WriteLine("Please enter an integer. Ex. 1, 2, 3, ...");
-                return NumberOfDiceCollector();
+                catch (Exception)
+                {
+                    Console.WriteLine("Please enter an integer. Ex. 1, 2, 3, ...");
+                }
             }
         }
 
-        public static int[] DiceRoller(int ReturnedDiceType, int ReturnedNumberOfDice)
+        public class Dice
         {
-            Console.WriteLine("Rolling dice...");
-            int i;
-            int[] DieArray = new int[ReturnedNumberOfDice];
-            for (i = 0; i < ReturnedNumberOfDice; i++)
+            public int NumberOfSides;
+
+            public int DiceRoller()
             {
                 Random rnd = new Random();
-                int RollerResult = rnd.Next(1, ReturnedDiceType + 1);
-                DieArray[i] = RollerResult;
-                Console.Write(DieArray[i] + " ");
+                int RollerResult = rnd.Next(1, NumberOfSides + 1);
+                return RollerResult;
             }
-            Console.WriteLine(" ");
-            return DieArray;
-
         }
 
+        public static void DiceRoller(int ReturnedDiceType, int ReturnedNumberOfDice)
+        {
+            Console.WriteLine("Rolling dice...");
+            List<Dice> dieRolls = new List<Dice>();
+            int i;
+            for(i=0; i < ReturnedNumberOfDice; i++)
+            {
+                Dice die = new Dice();
+                die.NumberOfSides = ReturnedDiceType;
+                int Result = die.DiceRoller();
+                Console.Write(Result + " ");
+            }
+
+            Console.WriteLine("");
+        }
+       
         static bool RollDiceAgain()
         {
             while (true)
