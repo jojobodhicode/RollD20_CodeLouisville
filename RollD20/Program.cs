@@ -44,15 +44,18 @@ namespace RollD20
                         return DiceTypeInt;
                     }
 
-                    catch (Exception)
+                    catch (Exception ex)
                     {
                         Console.WriteLine("Please format your dice type in the format d + number of sides, ex.d4, d6, d10,...");
+                        //Opens DummyFile.txt and append lines. If file is not exists then create and open.
+                        File.AppendAllText(@"C:\RollD20Exceptions.txt", ex.Message + "\r\n");
                     }
                 }
 
                 else
                 {
                     Console.WriteLine("Please format your dice type in the format d + number of sides, ex.d4, d6, d10,...");
+                    File.AppendAllText(@"C:\RollD20Exceptions.txt", "The DiceType entered was not a number. It was: " + DiceType + "\r\n");
                 }
             }
         }
@@ -70,9 +73,11 @@ namespace RollD20
                     return DiceNumberInt;
                 }
 
-                catch (Exception)
+                catch (Exception ex)
                 {
                     Console.WriteLine("Please enter an integer. Ex. 1, 2, 3, ...");
+                    Console.WriteLine("The User Entered " + DiceNumber + " instead of an integer");
+                    File.AppendAllText(@"C:\RollD20Exceptions.txt", ex.Message + "\r\n");
                 }
             }
         }
